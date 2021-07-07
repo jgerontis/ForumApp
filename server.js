@@ -24,12 +24,6 @@ server.use((req, res, next) => {
   next();
 });
 
-// define the first route
-app.get("/", function (req, res) {
-  res.sendFile('static/index.html'{root:_dirname});
-})
-
-
 // get all threads (filter by category if present)
 server.get(`/thread`, (req, res) => {
   // impliment filtering
