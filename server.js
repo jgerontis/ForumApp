@@ -206,9 +206,9 @@ server.post("/replies",(req,res)=>{
     thread_id: req.params.thread_id,
     post_id:req.params.post_id
   };
-  Thread.findByIdAndUpdate(
-    req.body.post_id, 
-    { $push: { replies: newReply } },
+  Thread.findOneAndUpdate(
+    {_id:req.body.thread_id, "comments._id":req.body.post_id},
+    {$push: {"comments.$.replies":newReply}},
     { new: true },
     (err, thread) =>{
       if (err != null) {
@@ -217,12 +217,13 @@ server.post("/replies",(req,res)=>{
           message: "Unable to add a reply to Comment",
         });
       } else if (thread === null) {
+        console.log(thread);
         res.status(404);
         console.log(
           "Comment does not exist. Can't Reply a nonexistent comment"
         );
       } else {
-        res.status(201).json(thread.posts.replies);
+        res.status(201).json(thread);
       }
     }
 

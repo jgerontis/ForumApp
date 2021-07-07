@@ -9,6 +9,7 @@ function connect(callback) {
     .connect(connectionString, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      useFindAndModify: false,
     })
     .catch((err) => {
       console.log("There was an error connecting to the db", err);
