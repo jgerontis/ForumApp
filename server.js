@@ -210,7 +210,7 @@ server.post("/replies",(req,res)=>{
     req.body.post_id, 
     { $push: { replies: newReply } },
     { new: true },
-    (err, comment) =>{
+    (err, thread) =>{
       if (err != null) {
         res.status(500).json({
           error: err,
@@ -222,7 +222,7 @@ server.post("/replies",(req,res)=>{
           "Comment does not exist. Can't Reply a nonexistent comment"
         );
       } else {
-        res.status(201).json(comment.replies[comment.replies.length - 1]);
+        res.status(201).json(thread.posts.replies);
       }
     }
 
