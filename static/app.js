@@ -33,7 +33,7 @@ var app = new Vue({
     new_comment_body: "",
     new_comment_author: "",
 
-    server_url: "https://jg-forum-2021.herokuapp.com",
+    server_url: "http://localhost:8080",
   },
   created: function () {
     this.getThreads();
@@ -79,6 +79,43 @@ var app = new Vue({
         app.getThreads();
       });
     },
+
+    upvoteThread: function (thread) {
+      let votes = thread.votes;
+      votes++;
+      fetch(this.server_url + "/tvote/" + thread._id, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: {
+          votes,
+        },
+      }).then((res) => {
+        res.json().then((data) => {
+          app.getThreads();
+        });
+      });
+    },
+    downvoteThread: function (thread_id) {
+      let votes = thread.votes;
+      votes--;
+      fetch(this.server_url + "/tvote/" + thread._id, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: {
+          votes,
+        },
+      }).then((res) => {
+        res.json().then((data) => {
+          app.getThreads();
+        });
+      });
+    },
+    upvoteComment: function (comment) {},
+    downvoteComment: function (comment) {},
 
     getComments: function (thread_id) {
       console.log("You clicked:", thread_id);
