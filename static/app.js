@@ -36,6 +36,10 @@ var app = new Vue({
     new_comment_body: "",
     new_comment_author: "",
 
+    // for new reply to comment
+    new_reply_body: "",
+    new_reply_author: "",
+
     server_url: "https://jg-forum-2021.herokuapp.com",
   },
   created: function () {
@@ -123,6 +127,48 @@ var app = new Vue({
         }
       ).then(function () {
         app.getComments(comment.thread_id);
+      });
+    },
+    getReply: function (comment_id) {
+      console.log("You clicked:", comment_id);
+      fetch(this.server_url + "/thread/" + thread_id).then((res) => {
+        res.json().then((data) => {
+          app.active_comment = data;
+          app.page = "thread";
+          console.log(data);
+        });
+      });
+    },
+
+    createReply: function () {
+      var new_reply = {
+        thread_id: this.active_comment._id,
+        author: this.new_reply_author,
+        body: this.new_reply_body,
+      };
+      fetch(this.server_url + "/comment/" + this.active_comment._id, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(new_reply),
+      }).then(function () {
+        app.getReply(app.active_comment._id);
+        app.new_reply_author = "";
+        app.new_reply_body = "";
+      });
+    },
+    deleteReply: function (comment) {
+      fetch(
+        this.server_url + "/comment/" + comment.thread_id + "/" + comment._id,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      ).then(function () {
+        app.getReply(comment.thread_id);
       });
     },
   },

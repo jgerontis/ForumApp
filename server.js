@@ -194,4 +194,39 @@ server.delete("/comment/:thread_id/:comment_id", (req, res) => {
   );
 });
 
+server.post("/replies",(req,res)=>{
+  res.setHeader("Content-Type", "application/json");
+  console.log(`creating a reply to a comment with body`, req.body);
+
+  let newReply = {
+    author: req.body.author || "",
+    body: req.body.body || "",
+    votes: 0,
+    thread_id: req.params.thread_id,
+    post_id:req.params.post_id
+  };
+  Thread.findByIdAndUpdate(
+    req.body.post_id, 
+    { $push: { replies: newReply } },
+    { new: true },
+    (err, comment) =>{
+      if (err != null) {
+        res.status(500).json({
+          error: err,
+          message: "Unable to add a reply to Comment",
+        });
+      } else if (thread === null) {
+        res.status(404);
+        console.log(
+          "Comment does not exist. Can't Reply a nonexistent comment"
+        );
+      } else {
+        res.status(201).json(comment.replies[comment.replies.length - 1]);
+      }
+    }
+
+  )
+  
+});
+
 module.exports = server;
