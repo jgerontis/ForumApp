@@ -1,12 +1,12 @@
 // src/main.js
 // src/main.js
 
-import Vue from "vue";
-import vuetify from "@/plugins/vuetify"; // path to vuetify export
+// import Vue from "vue";
+// import vuetify from "@/plugins/vuetify"; // path to vuetify export
 
 var app = new Vue({
   el: "#app",
-  vuetify: vuetify,
+  vuetify: new Vuetify(),
   data: {
     page: "blog",
     drawer: false,
@@ -26,6 +26,8 @@ var app = new Vue({
 
     active_thread: {},
 
+    active_comment: {},
+
     //for a new thread
     new_title: "",
     new_author: "",
@@ -41,6 +43,7 @@ var app = new Vue({
     new_reply_author: "",
 
     server_url: "https://jg-forum-2021.herokuapp.com",
+   
   },
   created: function () {
     this.getThreads();
@@ -140,9 +143,9 @@ var app = new Vue({
       });
     },
 
-    createReply: function () {
+    createReply: function (comment) {
       var new_reply = {
-        thread_id: this.active_comment._id,
+        comment_id: this.active_comment._id,
         author: this.new_reply_author,
         body: this.new_reply_body,
       };
@@ -158,19 +161,19 @@ var app = new Vue({
         app.new_reply_body = "";
       });
     },
-    deleteReply: function (comment) {
-      fetch(
-        this.server_url + "/comment/" + comment.thread_id + "/" + comment._id,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      ).then(function () {
-        app.getReply(comment.thread_id);
-      });
-    },
+  //   deleteReply: function (comment) {
+  //     fetch(
+  //       this.server_url + "/comment/" + comment.thread_id + "/" + comment._id,
+  //       {
+  //         method: "DELETE",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     ).then(function () {
+  //       app.getReply(comment.thread_id);
+  //     });
+  //   },
   },
   computed: {
     sorted_threads: function () {
@@ -186,4 +189,4 @@ var app = new Vue({
   },
 });
 
-export { app };
+// export { app };
