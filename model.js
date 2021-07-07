@@ -16,6 +16,7 @@ const commentSchema = mongoose.Schema(
     author: String,
     body: String,
     votes: Number,
+    replies: [repliesSchema],
     thread_id: { type: mongoose.Schema.Types.ObjectId, ref: "Thread" },
   },
   { timestamps: true }
