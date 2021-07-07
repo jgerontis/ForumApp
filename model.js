@@ -1,6 +1,16 @@
 /* DATA MODEL */
 const mongoose = require("mongoose");
 
+const repliesSchema = mongoose.Schema(
+  {
+    author: String,
+    body: String,
+    thread_id: { type: mongoose.Schema.Types.ObjectId, ref: "Thread" },
+    comment_id: { type: mongoose.Schema.Types.ObjectId, ref: "Comment" },
+  },
+  { timestamps: true }
+);
+
 const commentSchema = mongoose.Schema(
   {
     author: String,
