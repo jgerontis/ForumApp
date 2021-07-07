@@ -2,8 +2,9 @@
 <html>
 
 <head>
-    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -21,7 +22,8 @@
                         <v-btn text v-on:click="page ='create'">New Thread</v-btn>
                     </v-toolbar-items>
                 </v-app-bar>
-                <v-navigation-drawer app v-model="drawer">
+                <!-- 
+                    <v-navigation-drawer app v-model="drawer">
                     <v-list>
                         <v-list-item v-for="thread in threads">
                             <v-list-item-title>
@@ -32,6 +34,7 @@
                         </v-list-item>
                     </v-list>
                 </v-navigation-drawer>
+                -->
                 <v-container grid-list-lg fluid v-if="page == 'blog'">
                     <v-select :items="categories" label="Category" v-model="selected_category">
                     </v-select>
@@ -73,16 +76,28 @@
                                 <v-flex v-for="comment in active_thread.comments">
                                     <v-card>
                                         <v-card-title>
-                                            <div>
-                                                <div class="caption">By: {{ comment.author }}</div>
-                                                <span class="caption">{{ comment.body }}</span><br>
-                                            </div>
+                                            <div class="caption">{{ comment.author }}</div>
+                                        </v-card-title>
+                                        <v-card-text>
+                                            <span class="caption">{{ comment.body }}</span>
+                                        </v-card-text>
 
-                                            <v-spacer></v-spacer>
+                                        <v-card-actions>
                                             <v-btn v-on:click="deleteComment(comment)" rounded color="primary" dark>
                                                 Delete
                                             </v-btn>
-                                        </v-card-title>
+                                            <v-btn v-on:click="upvoteComment(comment)" rounded color="primary" dark>
+                                                <v-icon>mdi-thumb-up</v-icon>
+                                            </v-btn>
+                                            <span class="subheading mr-2">{{ comment.votes }}</span>
+                                            <v-btn v-on:click="downvoteComment(comment)" rounded color="primary" dark>
+                                                <v-icon>mdi-thumb-down</v-icon>
+                                            </v-btn>
+                                            <v-btn v-on:click="createReply(comment)" rounded color="primary" dark>
+                                                <v-icon>mdi-reply</v-icon>
+                                            </v-btn>
+                                        </v-card-actions>
+
                                     </v-card>
                                 </v-flex>
                             </v-layout>
@@ -98,6 +113,17 @@
                         </v-text-field>
 
                         <v-btn v-on:click="createComment()">Submit</v-btn>
+                    </v-flex>
+                    <v-flex xs6 text-xs-center>
+                        <div class="display-2">New Reply</div>
+
+                        <v-text-field label="Author" v-model="new_reply_author">
+                        </v-text-field>
+
+                        <v-text-field label="Body" v-model="new_reply_body">
+                        </v-text-field>
+
+                        <v-btn v-on:click="createReply()">Reply</v-btn>
                     </v-flex>
                 </v-container>
 
@@ -125,7 +151,10 @@
             </v-main>
         </v-app>
     </div>
-    <script src="app.js" type="module"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <script src="app.js"></script>
 
 </body>
 
