@@ -42,7 +42,7 @@ var app = new Vue({
     new_reply_body: "",
     new_reply_author: "",
 
-    server_url: "https://jg-forum-2021.herokuapp.com",
+    server_url: "https://localhost:8080",
    
   },
   created: function () {
@@ -161,19 +161,19 @@ var app = new Vue({
         app.new_reply_body = "";
       });
     },
-  //   deleteReply: function (comment) {
-  //     fetch(
-  //       this.server_url + "/comment/" + comment.thread_id + "/" + comment._id,
-  //       {
-  //         method: "DELETE",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     ).then(function () {
-  //       app.getReply(comment.thread_id);
-  //     });
-  //   },
+    // deleteReply: function (comment) {
+    //   fetch(
+    //     this.server_url + "/comment/" + comment.thread_id + "/" + comment._id,
+    //     {
+    //       method: "DELETE",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //     }
+    //   ).then(function () {
+    //     app.getReply(comment.thread_id);
+    //   });
+    // },
   },
   computed: {
     sorted_threads: function () {
