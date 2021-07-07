@@ -18,7 +18,7 @@ var app = new Vue({
     ],
     threads: [],
 
-    postings: [],
+    active_thread: {},
 
     //for a new thread
     new_name: "",
@@ -26,11 +26,11 @@ var app = new Vue({
     new_description: "",
     new_category: "all",
 
-    //for a new post on a thread
-    new_post_body: "",
-    new_post_author: "",
+    //for a new comment on a thread
+    new_comment_body: "",
+    new_comment_author: "",
 
-    server_url: "http://forum2021.codeschool.cloud",
+    server_url: "http://localhost:8080",
   },
   created: function () {
     this.getThreads();
@@ -77,45 +77,46 @@ var app = new Vue({
       });
     },
 
-    getPosts: function (thread_id) {
-      fetch(this.server_url + "/thread/" + thread_id)
-        .then(function (res) {
-          res.json().then(function (data) {
-            app.postings = data;
-            console.log(data);
-          });
-        })
-        .then(function () {
-          app.page = "posts";
+    getComments: function (thread_id) {
+      console.log("You clicked:", thread_id);
+      fetch(this.server_url + "/thread/" + thread_id).then((res) => {
+        res.json().then((data) => {
+          app.active_thread = data;
+          app.page = "thread";
+          console.log(data);
         });
+      });
     },
 
-    createPost: function (thread_id) {
-      var new_post = {
-        thread_id: thread_id,
-        author: this.new_post_author,
-        body: this.new_post_body,
+    createComment: function () {
+      var new_comment = {
+        thread_id: this.active_thread._id,
+        author: this.new_comment_author,
+        body: this.new_comment_body,
       };
-      fetch(this.server_url + "/post", {
+      fetch(this.server_url + "/comment/" + this.active_thread._id, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(new_post),
+        body: JSON.stringify(new_comment),
       }).then(function () {
-        app.getPosts(thread_id);
-        app.new_post_author = "";
-        app.new_post_body = "";
+        app.getComments(app.active_thread._id);
+        app.new_comment_author = "";
+        app.new_comment_body = "";
       });
     },
-    deletePost: function (post) {
-      fetch(this.server_url + "/post/" + post.thread_id + "/" + post._id, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }).then(function () {
-        app.getPosts(post.thread_id);
+    deleteComment: function (comment) {
+      fetch(
+        this.server_url + "/comment/" + comment.thread_id + "/" + comment._id,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      ).then(function () {
+        app.getComments(comment.thread_id);
       });
     },
   },

@@ -19,7 +19,7 @@
                     <v-spacer></v-spacer>
                     <v-toolbar-items>
                         <v-btn text v-on:click="page ='blog'">Blog</v-btn>
-                        <v-btn text v-on:click="page ='thread'">New Thread</v-btn>
+                        <v-btn text v-on:click="page ='create'">New Thread</v-btn>
                     </v-toolbar-items>
                 </v-app-bar>
                 <v-navigation-drawer app v-model="drawer">
@@ -45,8 +45,8 @@
                                 <v-flex v-for="thread in sorted_threads">
                                     <v-card>
                                         <v-card-title>
-                                            <div v-on:click="getPosts(thread._id)">
-                                                <div class="headline">{{ thread.name }}</div>
+                                            <div v-on:click="getComments(thread._id)">
+                                                <div class="headline">{{ thread.title }}</div>
                                                 <div class="caption">By: {{ thread.author }}</div>
                                                 <span class="caption">{{ thread.description }}</span><br>
                                                 <span class="body-2" text-xs-center>{{ thread.category }}</span>
@@ -66,22 +66,21 @@
 
 
 
-                <v-container grid-list-lg fluid v-if="page == 'posts'">
+                <v-container grid-list-lg fluid v-if="page == 'thread'">
                     <v-layout>
-                        <v-flex xs3></v-flex>
                         <v-flex xs6 text-xs-center>
-                            <div class="display-2">Posts</div>
+                            <div class="display-2">{{ active_thread.title }}</div>
                             <v-layout column>
-                                <v-flex v-for="post in postings.posts">
+                                <v-flex v-for="comment in active_thread.comments">
                                     <v-card>
                                         <v-card-title>
                                             <div>
-                                                <div class="caption">By: {{ post.author }}</div>
-                                                <span class="caption">{{ post.body }}</span><br>
+                                                <div class="caption">By: {{ comment.author }}</div>
+                                                <span class="caption">{{ comment.body }}</span><br>
                                             </div>
 
                                             <v-spacer></v-spacer>
-                                            <v-btn v-on:click="deletePost(post)" rounded color="primary" dark>
+                                            <v-btn v-on:click="deleteComment(post)" rounded color="primary" dark>
                                                 Delete
                                             </v-btn>
                                         </v-card-title>
@@ -89,13 +88,22 @@
                                 </v-flex>
                             </v-layout>
                         </v-flex>
-                        <v-flex xs3></v-flex>
                     </v-layout>
+                    <v-flex xs6 text-xs-center>
+                        <div class="display-2">New Comment</div>
+
+                        <v-text-field label="Author" v-model="new_comment_author">
+                        </v-text-field>
+
+                        <v-text-field label="Body" v-model="new_comment_body">
+                        </v-text-field>
+
+                        <v-btn v-on:click="createComment()">Submit</v-btn>
+                    </v-flex>
                 </v-container>
 
-                <v-container v-if="page == 'thread'">
+                <v-container v-if="page == 'create'">
                     <v-layout>
-                        <v-flex xs3></v-flex>
                         <v-flex xs6 text-xs-center>
                             <div class="display-2">Create Thread</div>
                             <v-text-field label="title" v-model="new_name">
@@ -110,7 +118,8 @@
                             </v-text-field>
 
                             <v-btn v-on:click="createThread()">Submit</v-btn>
-
+                        </v-flex>
+                    </v-layout>
                 </v-container>
 
 
@@ -119,7 +128,7 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
-    <script src="code.js"></script>
+    <script src="app.js"></script>
 
 </body>
 
