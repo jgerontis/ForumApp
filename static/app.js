@@ -30,7 +30,7 @@ var app = new Vue({
     new_comment_body: "",
     new_comment_author: "",
 
-    server_url: "http://localhost:8080",
+    server_url: "https://jg-forum-2021.herokuapp.com",
   },
   created: function () {
     this.getThreads();

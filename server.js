@@ -7,6 +7,7 @@ const server = express();
 
 server.use(cors());
 server.use(express.json({}));
+server.use(express.static("static"));
 
 // this is where we will do our own middleware
 server.use((req, res, next) => {
