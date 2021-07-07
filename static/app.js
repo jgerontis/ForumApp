@@ -1,12 +1,9 @@
 // src/main.js
+
 // src/main.js
-
-import Vue from "vue";
-import vuetify from "@/plugins/vuetify"; // path to vuetify export
-
 var app = new Vue({
   el: "#app",
-  vuetify: vuetify,
+  vuetify: new Vuetify(),
   data: {
     page: "blog",
     drawer: false,
@@ -139,5 +136,3 @@ var app = new Vue({
     },
   },
 });
-
-export { app };
