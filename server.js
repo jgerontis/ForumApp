@@ -108,6 +108,7 @@ server.post(`/comment/:thread_id/`, (req, res) => {
     author: req.body.author || "",
     body: req.body.body || "",
     votes: 0,
+    replies: [],
     thread_id: req.params.thread_id,
   };
 
