@@ -21,7 +21,7 @@ var app = new Vue({
     active_thread: {},
 
     //for a new thread
-    new_name: "",
+    new_title: "",
     new_author: "",
     new_description: "",
     new_category: "all",
@@ -46,7 +46,7 @@ var app = new Vue({
 
     createThread: function () {
       var new_thread = {
-        name: this.new_name,
+        title: this.new_title,
         author: this.new_author,
         description: this.new_description,
         category: this.new_category,
