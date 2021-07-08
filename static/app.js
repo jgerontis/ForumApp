@@ -4,6 +4,7 @@
 // import Vue from "vue";
 // import vuetify from "@/plugins/vuetify"; // path to vuetify export
 
+// src/main.js
 var app = new Vue({
   el: "#app",
   vuetify: new Vuetify(),
@@ -42,7 +43,7 @@ var app = new Vue({
     new_reply_body: "",
     new_reply_author: "",
 
-    server_url: "https://localhost:8080",
+    server_url: "http://localhost:8080",
    
   },
   created: function () {
@@ -53,6 +54,7 @@ var app = new Vue({
       fetch(this.server_url + "/thread").then(function (res) {
         res.json().then(function (data) {
           app.threads = data;
+          console.log(data);
         });
       });
     },
@@ -72,7 +74,7 @@ var app = new Vue({
         body: JSON.stringify(new_thread),
       }).then(function () {
         app.getThreads();
-        app.new_name = "";
+        app.new_title = "";
         app.new_author = "";
         app.category = "all";
         app.new_description = "";
@@ -87,6 +89,40 @@ var app = new Vue({
         },
       }).then(function () {
         app.getThreads();
+      });
+    },
+
+    upvoteThread: function (thread) {
+      let votes = thread.votes;
+      votes++;
+      votes = JSON.stringify(votes);
+      fetch(this.server_url + "/tvote/" + thread._id, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: votes,
+      }).then((res) => {
+        res.json().then((data) => {
+          app.getThreads();
+        });
+      });
+    },
+    downvoteThread: function (thread_id) {
+      let votes = thread.votes;
+      votes--;
+      fetch(this.server_url + "/tvote/" + thread._id, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: {
+          votes,
+        },
+      }).then((res) => {
+        res.json().then((data) => {
+          app.getThreads();
+        });
       });
     },
 
