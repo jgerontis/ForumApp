@@ -108,6 +108,7 @@ server.post(`/comment/:thread_id/`, (req, res) => {
     author: req.body.author || "",
     body: req.body.body || "",
     votes: 0,
+    replies: [],
     thread_id: req.params.thread_id,
   };
 
@@ -194,13 +195,50 @@ server.delete("/comment/:thread_id/:comment_id", (req, res) => {
   );
 });
 
+server.post("/replies",(req,res)=>{
+  res.setHeader("Content-Type", "application/json");
+  console.log(`creating a reply to a comment with body`, req.body);
+
+  let newReply = {
+    author: req.body.author || "",
+    body: req.body.body || "",
+    votes: 0,
+    thread_id: req.params.thread_id,
+    post_id:req.params.post_id
+  };
+  Thread.findOneAndUpdate(
+    {_id:req.body.thread_id, "comments._id":req.body.post_id},
+    {$push: {"comments.$.replies":newReply}},
+    { new: true },
+    (err, thread) =>{
+      if (err != null) {
+        res.status(500).json({
+          error: err,
+          message: "Unable to add a reply to Comment",
+        });
+      } else if (thread === null) {
+        console.log(thread);
+        res.status(404);
+        console.log(
+          "Comment does not exist. Can't Reply a nonexistent comment"
+        );
+      } else {
+        res.status(201).json(thread);
+      }
+    }
+
+  )
+});
 server.patch("/tvote/:thread_id", (req, res) => {
   res.setHeader("Content-Type", "application/json");
   console.log(`updating thread with id ${req.params.thread_id}`);
-  Thread.findByIdAndUpdate(
-    req.params.thread_id,
+  let updatedThread = {};
+
+  updatedThread.votes = req.body.votes;
+  Thread.updateOne(
+    { _id: req.params.thread_id },
     {
-      $set: { votes: req.body },
+      $set: updatedThread,
     },
     {
       new: true,
@@ -211,11 +249,7 @@ server.patch("/tvote/:thread_id", (req, res) => {
       } else if (thread === null) {
         res.status(404).json(thread);
       }
-      res
-        .status(201)
-        .json(
-          thread.comments.filter((comment) => comment.body === req.body.body)
-        );
+      res.status(201);
       // success
     }
   );

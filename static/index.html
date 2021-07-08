@@ -38,9 +38,10 @@
                 <v-container grid-list-lg fluid v-if="page == 'blog'">
                     <v-select :items="categories" label="Category" v-model="selected_category">
                     </v-select>
-
+                    <!-- 
+                        this is gonna be an awesome feature (not really)
+                    -->
                     <v-layout>
-                        <v-flex xs3></v-flex>
                         <v-flex xs6 text-xs-center>
                             <div class="display-2">Threads</div>
                             <v-layout column>
@@ -70,7 +71,7 @@
                         <v-flex xs6 text-xs-center>
                             <v-layout column>
                                 <v-flex>
-                                    <v-card>
+                                    <v-card class="ma-5">
                                         <v-card-title>
                                             <div class="headline">{{ active_thread.title }}</div>
                                         </v-card-title>
@@ -100,7 +101,7 @@
                                         </v-card-actions>
                                     </v-card>
 
-                                    <v-card v-for="comment in active_thread.comments">
+                                    <v-card v-for="comment in active_thread.comments" class="ma-3">
                                         <v-card-title>
                                             <div class="caption">{{ comment.author }}</div>
                                         </v-card-title>
@@ -139,6 +140,17 @@
                         </v-text-field>
 
                         <v-btn v-on:click="createComment()">Submit</v-btn>
+                    </v-flex>
+                    <v-flex xs6 text-xs-center>
+                        <div class="display-2">New Reply</div>
+
+                        <v-text-field label="Author" v-model="new_reply_author">
+                        </v-text-field>
+
+                        <v-text-field label="Body" v-model="new_reply_body">
+                        </v-text-field>
+
+                        <v-btn v-on:click="createReply()">Reply</v-btn>
                     </v-flex>
                 </v-container>
 
