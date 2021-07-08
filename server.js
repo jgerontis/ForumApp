@@ -232,10 +232,13 @@ server.post("/replies",(req,res)=>{
 server.patch("/tvote/:thread_id", (req, res) => {
   res.setHeader("Content-Type", "application/json");
   console.log(`updating thread with id ${req.params.thread_id}`);
-  Thread.findByIdAndUpdate(
-    req.params.thread_id,
+  let updatedThread = {};
+
+  updatedThread.votes = req.body.votes;
+  Thread.updateOne(
+    { _id: req.params.thread_id },
     {
-      $set: { votes: req.body },
+      $set: updatedThread,
     },
     {
       new: true,
@@ -246,11 +249,7 @@ server.patch("/tvote/:thread_id", (req, res) => {
       } else if (thread === null) {
         res.status(404).json(thread);
       }
-      res
-        .status(201)
-        .json(
-          thread.comments.filter((comment) => comment.body === req.body.body)
-        );
+      res.status(201);
       // success
     }
   );
