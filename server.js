@@ -25,7 +25,7 @@ server.use((req, res, next) => {
 });
 
 // get all threads (filter by category if present)
-server.get(`/thread`, (req, res) => {
+server.get(`/thread`, (req, res, next) => {
   // impliment filtering
   findQuery = {};
   Thread.find(findQuery, (err, threads) => {
@@ -38,6 +38,7 @@ server.get(`/thread`, (req, res) => {
     }
     // success!!! return all the todos
     res.status(200).json(threads);
+    next();
   });
 });
 
@@ -222,5 +223,12 @@ server.patch("/tvote/:thread_id", (req, res) => {
 });
 
 //add more features
+
+//Add middleware to handle errors and sucesses 
+
+app.use((req,res)=>{
+  console.log("This is working")
+  }
+)
 
 module.exports = server;
