@@ -194,6 +194,33 @@ server.delete("/comment/:thread_id/:comment_id", (req, res) => {
   );
 });
 
+server.patch("/tvote/:thread_id", (req, res) => {
+  res.setHeader("Content-Type", "application/json");
+  console.log(`updating thread with id ${req.params.thread_id}`);
+  Thread.findByIdAndUpdate(
+    req.params.thread_id,
+    {
+      $set: { votes: req.body },
+    },
+    {
+      new: true,
+    },
+    (err, thread) => {
+      if (err != null) {
+        res.status(500).json(err);
+      } else if (thread === null) {
+        res.status(404).json(thread);
+      }
+      res
+        .status(201)
+        .json(
+          thread.comments.filter((comment) => comment.body === req.body.body)
+        );
+      // success
+    }
+  );
+});
+
 module.exports = server;
 
 //This is confusing as all get out.
