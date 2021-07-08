@@ -43,6 +43,7 @@ var app = new Vue({
       fetch(this.server_url + "/thread").then(function (res) {
         res.json().then(function (data) {
           app.threads = data;
+          console.log(data);
         });
       });
     },
@@ -62,7 +63,7 @@ var app = new Vue({
         body: JSON.stringify(new_thread),
       }).then(function () {
         app.getThreads();
-        app.new_name = "";
+        app.new_title = "";
         app.new_author = "";
         app.category = "all";
         app.new_description = "";
