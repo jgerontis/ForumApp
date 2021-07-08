@@ -5,6 +5,31 @@
 // import vuetify from "@/plugins/vuetify"; // path to vuetify export
 
 // src/main.js
+
+// components :)
+// ======================================
+Vue.component("CommentBox", {
+  template: `
+        <v-flex xs6 text-xs-center>
+            <v-text-field label="Author" v-model="new_comment_author"></v-text-field>
+            <v-text-field label="Body" v-model="new_comment_body">
+        </v-text-field>
+        <v-btn v-on:click="createComment()">Submit</v-btn>
+    </v-flex>`,
+});
+
+Vue.component("ReplyBox", {
+  template: `
+          <v-flex xs8 text-xs-center>
+              <v-text-field label="Author" v-model="new_reply_author"></v-text-field>
+              <v-text-field label="Body" v-model="new_reply_body">
+          </v-text-field>
+          <v-btn v-on:click="createReply(comment)">Submit</v-btn>
+      </v-flex>`,
+});
+// end of components :)
+// ======================================
+
 var app = new Vue({
   el: "#app",
   vuetify: new Vuetify(),
@@ -81,6 +106,7 @@ var app = new Vue({
         app.page = "blog";
       });
     },
+
     deleteThread: function (thread_id) {
       fetch(this.server_url + "/thread/" + thread_id, {
         method: "DELETE",
@@ -91,6 +117,7 @@ var app = new Vue({
         app.getThreads();
       });
     },
+
     upvoteThread: function (thread) {
       fetch(this.server_url + "/tvote/" + thread._id, {
         method: "PATCH",
@@ -102,6 +129,7 @@ var app = new Vue({
         });
       });
     },
+
     downvoteThread: function (thread) {
       fetch(this.server_url + "/tvote/" + thread._id, {
         method: "PATCH",
