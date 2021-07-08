@@ -195,3 +195,5 @@ server.delete("/comment/:thread_id/:comment_id", (req, res) => {
 });
 
 module.exports = server;
+
+//This is confusing as all get out.
