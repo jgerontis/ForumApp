@@ -84,13 +84,10 @@ var app = new Vue({
     upvoteThread: function (thread) {
       let votes = thread.votes;
       votes++;
-      votes = JSON.stringify(votes);
       fetch(this.server_url + "/tvote/" + thread._id, {
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: votes,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ votes: votes }),
       }).then((res) => {
         res.json().then((data) => {
           app.getThreads();
@@ -102,12 +99,8 @@ var app = new Vue({
       votes--;
       fetch(this.server_url + "/tvote/" + thread._id, {
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: {
-          votes,
-        },
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ votes: votes }),
       }).then((res) => {
         res.json().then((data) => {
           app.getThreads();
