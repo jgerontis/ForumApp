@@ -80,30 +80,26 @@ var app = new Vue({
         app.getThreads();
       });
     },
-
     upvoteThread: function (thread) {
-      let votes = thread.votes;
-      votes++;
       fetch(this.server_url + "/tvote/" + thread._id, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ votes: votes }),
+        body: JSON.stringify({ amount: 1 }),
       }).then((res) => {
         res.json().then((data) => {
-          app.getThreads();
+          app.getComments(thread._id);
         });
       });
     },
-    downvoteThread: function (thread_id) {
-      let votes = thread.votes;
-      votes--;
+    downvoteThread: function (thread) {
       fetch(this.server_url + "/tvote/" + thread._id, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ votes: votes }),
+        body: JSON.stringify({ amount: -1 }),
       }).then((res) => {
         res.json().then((data) => {
-          app.getThreads();
+          console.log("you did a vote");
+          app.getComments(thread._id);
         });
       });
     },

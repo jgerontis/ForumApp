@@ -46,8 +46,8 @@
                             <div class="display-2">Threads</div>
                             <v-layout column>
                                 <v-flex v-for="thread in sorted_threads" v-bind:key="thread._id">
-                                    <v-card>
-                                        <v-card-title v-on:click="getComments(thread._id)">
+                                    <v-card v-on:click="getComments(thread._id)">
+                                        <v-card-title>
                                             <div class="headline">{{ thread.title }}</div>
                                         </v-card-title>
                                         <v-card-subtitle>
@@ -71,7 +71,7 @@
                         <v-flex xs6 text-xs-center>
                             <v-layout column>
                                 <v-flex>
-                                    <v-card class="ma-5">
+                                    <v-card class="ml-3">
                                         <v-card-title>
                                             <div class="headline">{{ active_thread.title }}</div>
                                         </v-card-title>
@@ -92,7 +92,8 @@
                                                 <v-icon>mdi-thumb-up</v-icon>
                                             </v-btn>
                                             <span class="subheading mr-2">{{ active_thread.votes }}</span>
-                                            <v-btn v-on:click="downvoteThread(thread)" rounded color="primary" dark>
+                                            <v-btn v-on:click="downvoteThread(active_thread)" rounded color="primary"
+                                                dark>
                                                 <v-icon>mdi-thumb-down</v-icon>
                                             </v-btn>
                                             <v-btn rounded color="primary" dark>
@@ -101,7 +102,7 @@
                                         </v-card-actions>
                                     </v-card>
 
-                                    <v-card v-for="comment in active_thread.comments" class="ma-3">
+                                    <v-card v-for="comment in active_thread.comments" class="ma-5">
                                         <v-card-title>
                                             <div class="caption">{{ comment.author }}</div>
                                         </v-card-title>
