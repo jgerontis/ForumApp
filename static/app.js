@@ -214,8 +214,6 @@ var app = new Vue({
   },
 });
 
-export { app };
-
 //I SEE DEAD PEOPLE!!!
 
 // export { app };
