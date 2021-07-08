@@ -44,11 +44,11 @@ var app = new Vue({
     new_reply_author: "",
 
     server_url: "http://localhost:8080",
-   
   },
   created: function () {
     this.getThreads();
   },
+
   methods: {
     getThreads: function () {
       fetch(this.server_url + "/thread").then(function (res) {
@@ -144,6 +144,7 @@ var app = new Vue({
         app.new_comment_body = "";
       });
     },
+
     deleteComment: function (comment) {
       fetch(
         this.server_url + "/comment/" + comment.thread_id + "/" + comment._id,
@@ -157,6 +158,7 @@ var app = new Vue({
         app.getComments(comment.thread_id);
       });
     },
+
     getReply: function (comment_id) {
       console.log("You clicked:", comment_id);
       fetch(this.server_url + "/thread/" + thread_id).then((res) => {
@@ -186,21 +188,18 @@ var app = new Vue({
         app.new_reply_body = "";
       });
     },
-    
+
     deleteReply: function (reply) {
-      fetch(
-        this.server_url + "/reply/" + reply.comment_id + "/" + reply._id,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      ).then(function () {
+      fetch(this.server_url + "/reply/" + reply.comment_id + "/" + reply._id, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then(function () {
         app.getReply(reply.comment_id);
       });
     },
-
+  },
   computed: {
     sorted_threads: function () {
       if (this.selected_category == "all") {
