@@ -221,3 +221,6 @@ var app = new Vue({
 // here is a comment!!!
 
 //This is KALICIA
+
+// Ryann commented here
+// and here
