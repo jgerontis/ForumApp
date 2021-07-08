@@ -185,7 +185,7 @@ var app = new Vue({
         author: this.new_reply_author,
         body: this.new_reply_body,
       };
-      fetch(this.server_url + "/comment/" + this.active_comment._id, {
+      fetch(this.server_url + "/replies/" + this.active_comment._id, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -261,3 +261,5 @@ var app = new Vue({
 });
 
 // export { app };
+
+// here is a comment!!!
