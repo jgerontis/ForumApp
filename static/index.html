@@ -44,7 +44,7 @@
                         <v-flex xs6 text-xs-center>
                             <div class="display-2">Threads</div>
                             <v-layout column>
-                                <v-flex v-for="thread in sorted_threads">
+                                <v-flex v-for="thread in sorted_threads" v-bind:key="thread._id">
                                     <v-card>
                                         <v-card-title v-on:click="getComments(thread._id)">
                                             <div class="headline">{{ thread.title }}</div>

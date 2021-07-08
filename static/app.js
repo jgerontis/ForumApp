@@ -83,14 +83,13 @@ var app = new Vue({
     upvoteThread: function (thread) {
       let votes = thread.votes;
       votes++;
+      votes = JSON.stringify(votes);
       fetch(this.server_url + "/tvote/" + thread._id, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: {
-          votes,
-        },
+        body: votes,
       }).then((res) => {
         res.json().then((data) => {
           app.getThreads();
@@ -114,8 +113,6 @@ var app = new Vue({
         });
       });
     },
-    upvoteComment: function (comment) {},
-    downvoteComment: function (comment) {},
 
     getComments: function (thread_id) {
       console.log("You clicked:", thread_id);
