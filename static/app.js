@@ -33,7 +33,7 @@ var app = new Vue({
     new_comment_body: "",
     new_comment_author: "",
 
-    server_url: "https://jg-forum-2021.herokuapp.com",
+    server_url: "http://localhost:8080",
   },
   created: function () {
     this.getThreads();
@@ -43,6 +43,7 @@ var app = new Vue({
       fetch(this.server_url + "/thread").then(function (res) {
         res.json().then(function (data) {
           app.threads = data;
+          console.log(data);
         });
       });
     },
@@ -62,7 +63,7 @@ var app = new Vue({
         body: JSON.stringify(new_thread),
       }).then(function () {
         app.getThreads();
-        app.new_name = "";
+        app.new_title = "";
         app.new_author = "";
         app.category = "all";
         app.new_description = "";
@@ -77,6 +78,40 @@ var app = new Vue({
         },
       }).then(function () {
         app.getThreads();
+      });
+    },
+
+    upvoteThread: function (thread) {
+      let votes = thread.votes;
+      votes++;
+      votes = JSON.stringify(votes);
+      fetch(this.server_url + "/tvote/" + thread._id, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: votes,
+      }).then((res) => {
+        res.json().then((data) => {
+          app.getThreads();
+        });
+      });
+    },
+    downvoteThread: function (thread_id) {
+      let votes = thread.votes;
+      votes--;
+      fetch(this.server_url + "/tvote/" + thread._id, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: {
+          votes,
+        },
+      }).then((res) => {
+        res.json().then((data) => {
+          app.getThreads();
+        });
       });
     },
 
