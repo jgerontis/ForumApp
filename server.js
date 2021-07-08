@@ -226,7 +226,7 @@ server.patch("/tvote/:thread_id", (req, res) => {
 
 //Add middleware to handle errors and sucesses 
 
-app.use((req,res)=>{
+server.use((req,res)=>{
   console.log("This is working")
   }
 )
