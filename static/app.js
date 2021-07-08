@@ -1,4 +1,8 @@
 // src/main.js
+// src/main.js
+
+// import Vue from "vue";
+// import vuetify from "@/plugins/vuetify"; // path to vuetify export
 
 // src/main.js
 var app = new Vue({
@@ -23,6 +27,8 @@ var app = new Vue({
 
     active_thread: {},
 
+    active_comment: {},
+
     //for a new thread
     new_title: "",
     new_author: "",
@@ -33,7 +39,12 @@ var app = new Vue({
     new_comment_body: "",
     new_comment_author: "",
 
+    // for new reply to comment
+    new_reply_body: "",
+    new_reply_author: "",
+
     server_url: "http://localhost:8080",
+   
   },
   created: function () {
     this.getThreads();
@@ -150,6 +161,83 @@ var app = new Vue({
         app.getComments(comment.thread_id);
       });
     },
+    getReply: function (comment_id) {
+      console.log("You clicked:", comment_id);
+      fetch(this.server_url + "/thread/" + thread_id).then((res) => {
+        res.json().then((data) => {
+          app.active_comment = data;
+          app.page = "thread";
+          console.log(data);
+        });
+      });
+    },
+
+    createReply: function (comment) {
+      var new_reply = {
+        comment_id: this.active_comment._id,
+        author: this.new_reply_author,
+        body: this.new_reply_body,
+      };
+      fetch(this.server_url + "/replies/" + this.active_comment._id, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(new_reply),
+      }).then(function () {
+        app.getReply(app.active_comment._id);
+        app.new_reply_author = "";
+        app.new_reply_body = "";
+      });
+    },
+    
+    deleteReply: function (reply) {
+      fetch(
+        this.server_url + "/reply/" + reply.comment_id + "/" + reply._id,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      ).then(function () {
+        app.getReply(reply.comment_id);
+      });
+    },
+
+    upvoteThread: function (thread) {
+      let votes = thread.votes;
+      votes++;
+      votes = JSON.stringify(votes);
+      fetch(this.server_url + "/tvote/" + thread._id, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: votes,
+      }).then((res) => {
+        res.json().then((data) => {
+          app.getThreads();
+        });
+      });
+    },
+    downvoteThread: function (thread_id) {
+      let votes = thread.votes;
+      votes--;
+      fetch(this.server_url + "/tvote/" + thread._id, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: {
+          votes,
+        },
+      }).then((res) => {
+        res.json().then((data) => {
+          app.getThreads();
+        });
+      });
+    },
   },
   computed: {
     sorted_threads: function () {
@@ -164,3 +252,7 @@ var app = new Vue({
     },
   },
 });
+
+// export { app };
+
+// here is a comment!!!
