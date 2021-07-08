@@ -21,7 +21,7 @@ const commentSchema = mongoose.Schema(
   },
   { timestamps: true }
 );
-
+// comment comment comment comment
 const threadSchema = mongoose.Schema(
   {
     author: String,
