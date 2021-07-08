@@ -197,19 +197,54 @@ var app = new Vue({
         app.new_reply_body = "";
       });
     },
-    // deleteReply: function (comment) {
-    //   fetch(
-    //     this.server_url + "/comment/" + comment.thread_id + "/" + comment._id,
-    //     {
-    //       method: "DELETE",
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //     }
-    //   ).then(function () {
-    //     app.getReply(comment.thread_id);
-    //   });
-    // },
+    
+    deleteReply: function (reply) {
+      fetch(
+        this.server_url + "/reply/" + reply.comment_id + "/" + reply._id,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      ).then(function () {
+        app.getReply(reply.comment_id);
+      });
+    },
+
+    upvoteThread: function (thread) {
+      let votes = thread.votes;
+      votes++;
+      votes = JSON.stringify(votes);
+      fetch(this.server_url + "/tvote/" + thread._id, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: votes,
+      }).then((res) => {
+        res.json().then((data) => {
+          app.getThreads();
+        });
+      });
+    },
+    downvoteThread: function (thread_id) {
+      let votes = thread.votes;
+      votes--;
+      fetch(this.server_url + "/tvote/" + thread._id, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: {
+          votes,
+        },
+      }).then((res) => {
+        res.json().then((data) => {
+          app.getThreads();
+        });
+      });
+    },
   },
   computed: {
     sorted_threads: function () {
