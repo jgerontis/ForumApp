@@ -25,7 +25,7 @@ server.use((req, res, next) => {
 });
 
 // get all threads (filter by category if present)
-server.get(`/thread`, (req, res) => {
+server.get(`/thread`, (req, res, next) => {
   // impliment filtering
   findQuery = {};
   Thread.find(findQuery, (err, threads) => {
@@ -38,6 +38,7 @@ server.get(`/thread`, (req, res) => {
     }
     // success!!! return all the todos
     res.status(200).json(threads);
+    next();
   });
 });
 
@@ -108,6 +109,7 @@ server.post(`/comment/:thread_id/`, (req, res) => {
     author: req.body.author || "",
     body: req.body.body || "",
     votes: 0,
+    replies: [],
     thread_id: req.params.thread_id,
   };
 
@@ -194,6 +196,40 @@ server.delete("/comment/:thread_id/:comment_id", (req, res) => {
   );
 });
 
+server.post("/replies",(req,res)=>{
+  res.setHeader("Content-Type", "application/json");
+  console.log(`creating a reply to a comment with body`, req.body);
+
+  let newReply = {
+    author: req.body.author || "",
+    body: req.body.body || "",
+    votes: 0,
+    thread_id: req.params.thread_id,
+    post_id:req.params.post_id
+  };
+  Thread.findOneAndUpdate(
+    {_id:req.body.thread_id, "comments._id":req.body.post_id},
+    {$push: {"comments.$.replies":newReply}},
+    { new: true },
+    (err, thread) =>{
+      if (err != null) {
+        res.status(500).json({
+          error: err,
+          message: "Unable to add a reply to Comment",
+        });
+      } else if (thread === null) {
+        console.log(thread);
+        res.status(404);
+        console.log(
+          "Comment does not exist. Can't Reply a nonexistent comment"
+        );
+      } else {
+        res.status(201).json(thread);
+      }
+    }
+
+  )
+});
 server.patch("/tvote/:thread_id", (req, res) => {
   res.setHeader("Content-Type", "application/json");
   console.log(`updating thread with id ${req.params.thread_id}`);
@@ -216,4 +252,15 @@ server.patch("/tvote/:thread_id", (req, res) => {
   );
 });
 
+//add more features
+
+//Add middleware to handle errors and sucesses 
+
+server.use((req,res)=>{
+  console.log("This is working")
+  }
+)
+
 module.exports = server;
+
+//This is confusing as all get out.
