@@ -252,7 +252,17 @@ var app = new Vue({
     },
   },
 });
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+export { app };
+
+//I SEE DEAD PEOPLE!!!
+=======
+>>>>>>> Develop
+=======
 
 // export { app };
 
 // here is a comment!!!
+>>>>>>> fa2861d4d8677953b43b096f70756349e8e955de
